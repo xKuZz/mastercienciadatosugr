@@ -1,0 +1,56 @@
+- Ser capaces de sacar lo más posible de los dos sets que nos van a dar.
+- EDA intentar sacar una idea general de los datos, resumir sus características. Se suelen utilizar métodos visuales.
+
+- Uno de los puntos más importantes es decidir si nuestra distribución normal o no.
+
+- Hacer una lista de 4 o 5 hipótesis antes de afrontar los datos (requiere cierta formación previa sobre el tema del datasets).
+
+
+Univariable.
+1- Cuantificar la variable. Tres tipos de medida:
+  - tendencias centrales (media, moda o mediana) mean, mode y median, usar na.rm=T
+  - variabilidad sd, var
+  - otras posicioes relativa.
+
+bimodales -> categorizar la variable (si tiene sentido?)
+
+medidas de dispersión min, max, range na.rm=T
+quantiles
+
+skewness y curtosis > +- 2 hacer prueba de normalidad y transformación para que se parezca a distribución normal.
+
+pequeños data sets curvas de distribución (geom_density) en vez de histogramas
+
+En tablas de contingencia han de ser factores.
+
+Covarianza positiva signifca relación lineal positiva, si negativa negativa, 0 no existe correlación. 
+abs 0.9 covariación fuerte incluso 0.8
+0.5 covaración débil (no podemos decir covarianza lineal).
+Dos variables pueden no tener relación lineal y tener una correlación distinta de cero.
+
+Normalmente se usa el test de correlación de pearson, pero asume homoscedatiscidad y normalidad y relación lineal.
+Para distribuciones no normales, spearman, que requiere relación monotónicas entre las variables. Queremos usarlo con variables ordinales.
+Kendall no asume nada y es no paramétrico.
+
+MIRAR https://rcompanion.org/handbook/I_12.html Transformación a homoscedástico
+
+BOXPLOT cyl factor?
+
+http://www.sthda.com/english/wiki/ggplot2-essentials REFERENCIA GGPLOT2
+
+LEER https://medium.com/@EvanSinar/7-data-visualization-types-you-should-be-using-more-and-how-to-start-4015b5d4adf2
+
+geom_smooth añadir modelo
+
+Clase - Clase Mosaico 2 variables, asociación 3 o más
+
+Scatterplot matrix puede ayudar a deducir si tenemos variables redundantes.
+
+Normalmente nos va a interesar trabajar la fecha como una categoría.
+
+Aggregation plot. Hasta un 13 % podemos plantearnos hacer algo con los missing values, mayor de eso probablemente dropear la columna.
+
+TIpo de variables
+Sería más interesante convertirlas en otra variable regresion /class
+outliers/missing values.
+Relaciones de a 2 a 3, tendencias normales, transformación. HACER CAMBIO SOBRE CADA FOLD EN TRANSFORMACIÓN

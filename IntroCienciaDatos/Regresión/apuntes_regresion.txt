@@ -1,0 +1,47 @@
+Preferible backward selection para trabajo
+F > backward selection > p valores por encima de 0.1, 0.15, 0.2 empiezo a creerme que no es lineal y no aportan algo útil. R^2 mejora y repito el proceso.
+
+NO SE QUITAN VARIAS DE GOLPE, SE QUITA UNA A UNA.
+
+Otra forma: ascendente
+Empiezo modelo nulo.
+Lanzo 15 modelos lineales con una variable y me quedo la mejor. Añado una extra y me quedo con la mejor. Así hasta que añadir variables me dé un p-valor 
+que implique quitar la variable.
+
+No lo pide, pero es lo mejor que podemos hacer VALIDACIÓN CRUZADA (CV).
+Ir a preciso y a interpretable, si empeora muy poco podemos seguir quitando para poder explicar mejor el modelo.
+
+NO se pueden quitar variables componentes de interacciones aunque tengan p-values altos tras añadirla.
+
+Triple interacción
+Tengo 1*2*3, 1, 2, 3, 1*2, 1*3, 2*3. NO QUITAR SI SE QUEDA 1*2*3
+
+comparar medidas de distancia con... VALIDACIÓN CRUZADA
+
+El profesor está usando R 3.5.6 64-bits
+
+EN TRABAJO HACER CON CORRELACIONES, PERO MEJOR TAMBIÉN VISUALIZAR. EXPLICAR BIEN LOS PASOS REALIZADOS.
+
+Mostrar trozo summary siempre, es importante que se vea.
+
+Explicar metodología de quitar antes de realizarlo y mostrar después todos los ejemplos.
+
+Para indicar interacción ponemos multiplicación.
+
+O bien he buscado en el dataset información para generar las interacciones, 
+intentar graficar en 3D si existe alguna interacción (hiperplano), veo las más relevantes y voy a probar.
+
+Si hacer una interacción nos da buenos resultados, nos podemos quedar con ese para la interpretabilidad y
+añadir al anterior (múltiple) la interacción para un modelo de predecir.
+
+Después de interacciones, probar no linealidad. Mirar gráficas para determinar alguna de las variables (cuadrática, logarítmica, etc).
+la I indica que sólo mete lo que hay entre paréntesis, es necesario para cuadráticos.
+
+Podemos dejar k ajustado a 7 para el trabajo final.
+Al aplicar k-nn, podemos probar con el mejor modelo que obtuvimos en modelo lineal, he de probar siempre el completo como mínimo,
+probablemente también quitar categóricas.
+
+Lo que vale al final es el test de la validación cruzada. Dar conclusiones, mirar el mejor de test, podemos ver si hay sobreaprendizaje en
+training.
+
+Hacer tests en

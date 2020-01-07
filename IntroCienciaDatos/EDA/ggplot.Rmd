@@ -1,0 +1,103 @@
+---
+title: "ggplot2"
+author: "David Criado Ramón"
+date: "11/11/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("ggplot2")
+library("dplyr")
+```
+
+## Ejercicio 1.
+```{r}
+stretch <- c(46, 54, 48, 50, 44, 42, 52)
+distance <- c(148, 182, 173, 166, 198, 141, 166)
+df <- as.data.frame(cbind(stretch, distance))
+```
+
+### Pinta distance contra stretch.
+```{r}
+ggplot(df, aes(x=stretch, y=distance)) + geom_point()
+```
+
+## Ejercicio 2
+```{r}
+year <- 1970:1979
+snow.cover <- c(6.5, 12, 14.9, 10, 10.7, 7.9, 21.9, 12.5, 14.5, 9.2)
+df <- as.data.frame(cbind(year, snow.cover))
+df
+```
+
+### a) Pinta snow.cover contra año
+```{r}
+ggplot(df, aes(x=year, y=snow.cover)) + geom_point()
+```
+Puesto que es una progresión histórica a lo largo de los años parece terner más sentido usar un gráfico de líneas.
+
+```{r}
+ggplot(df, aes(x=year, y=snow.cover)) + geom_line()
+```
+
+### b) Pinta un histograma de los valores de snow.cover
+
+```{r}
+ggplot(df, aes(snow.cover)) + geom_histogram()
+```
+Probemos con un binwidth distinto de 30
+
+```{r}
+ggplot(df, aes(snow.cover)) + geom_histogram(binwidth = 0.2)
+```
+
+Cuando tenemos tan pocos datos es más interesante generar una curva de densidad de probabilidad.
+
+```{r}
+ggplot(df, aes(snow.cover)) + geom_density()
+```
+
+## Ejercicio 3.
+### Dados los de datos del tiempo en NY.
+```{r}
+df <- read.csv("weather_data_nyc_centralpark_2016.csv", na.strings="T")
+```
+
+### a) Convierte ºF a ºC e in a mm.
+La T indica que ha habido alguna precipitación pero no suficiente para poder realizar una medida.
+
+
+```{r}
+to_degrees <- function(f) (f-32)/1.8
+to_mm <- function(i) i*25.4
+names(df)[1] <- "date"
+df <- df %>% mutate(date=as.Date(date, format="%d-%m-%y"),
+                    maximum.temerature=to_degrees(maximum.temerature),
+                    minimum.temperature=to_degrees(minimum.temperature),
+                    average.temperature=to_degrees(average.temperature),
+                    precipitation=to_mm(precipitation),
+                    snow.fall=to_mm(snow.fall),
+                    snow.depth=to_mm(snow.depth))
+```
+
+
+### b) Pinta fecha vs temperatura mínima más caliente.
+```{r}
+ggplot(df, aes(x=date, y=minimum.temperature)) + geom_point()
+```
+
+Siendo una progresión temporal, me parece más informativo hacerlo con un gráfico de líneas.
+
+```{r}
+ggplot(df, aes(x=date, y=minimum.temperature)) + geom_line()
+```
+
+### c) Pinta fecha vs temperatura mínima más caliente y temperatura mínima más fría.
+
+Ahora utilizamos dos colores para diferenciar.
+```{r}
+ggplot(df, aes(x=date)) + geom_line(aes(y=minimum.temperature), col="blue") +
+         geom_line(aes(y=maximum.temerature), col="red") + ggtitle("Temperatura máxima y mínima según fecha") + ylab("Temperatura")
+```
+

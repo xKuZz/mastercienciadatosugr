@@ -1,0 +1,82 @@
+Profesor: Julián Luengo 
+Tutorías: Edificio clases Despacho 1.11 L 17:30-19:30 X 10:00-14:00
+
+Modelo 1 : knn para clasificación
+Medida de distancia: No siempre es lo ideal utilizar la distancia euclídea.
+¿Qué hacemos si tenemos un predictor categórico?
+BAJO MEDIO ALTO (hay orden) -> 1 2  3
+Atributos sin orden -> crear dummys (una columna, atributo binario, por categoría) [ej color: rojo verde azul]
+Otra manera sería utilizar medidas de distancia que utilizan atributos nominales. Ej: distancia HVDM
+
+Otro problema de distancia euclídea o de Minkowski:
+Al añadir muchos atributos empieza a dar la misma distancia con todas las muestras?? (más de 15-16) ? (La maldición de la dimensionalidad).
+Diferencia de escalas en variable afecta al modelo, normalizar antes (transformación min-max o normalización de media 0 y desviación 1.
+Podemos darle peso o quitar atributos (lo veremos en el curso de preprocesamiento).
+
+¿Qué pasa con el valor de k?
+Mapa de Voronoi (para 2 dimensiones, k=1) <- Para cada punto representa todos los puntos del espacio que son los más cercanos a él de un color. Es el único caso en el que podemos considerar "interpretable" el modelo.
+Problema de k = 1, posibilidad de solapamientos.
+
+k más bajo <- más preciso en training | k más alto <- más generalizado en training
+aumentar k para evitar overfitting en knn
+Tenemos que probar nosotros cuál es la k ideal para nuestro problema.
+
+Problema abierto para el futuro (knn): Podemos sólo quedarnos con los ejemplos necesarios para hacer una clasificación correcta.
+
+Problemas: Alto coste computacional para cálculo de distancia, alto consumo de memoria.
+Normalmente k-nn debe ir asociado a pocos ejemplos, pocos atributos.
+
+
+EVALUACIÓN
+------------------
+Aplicar los métodos que hemos visto (k-nn, lda y qda) [no regresión logística]
+Prueba con algunos k distintos, probar medidas de distancia distinta. Contar bien la historia y los paquetes usados.
+
+
+REGRESIÓN LOGÍSTICA
+-------------------
+Si aplicamos un regresor lineal podemos encontrarnos con probabilidades negativas o probabilidades superiores a 1. Utilizar una regresión lineal no es una buena idea por esos valores extremos.
+
+Para arreglarlo => Si la regresión lineal es 
+$$\beta_0 + \beta_1x$$
+Lo pasamos a exponencial y dividemos entre eso más 1.
+$$\frac{e^{(\beta_0 + \beta_1x)}}{1 + e^{(\beta_0 + \beta_1x)}}$$
+
+OPTIMIZAR SIGMOIDE
+$$\frac{P(Y=1|X)}{1-P(Y=1|X)}$$ Si la división vale 1 misma probabilidad más de 1 es factor veces más probable la clase 1, menor que 1 más veces probable la clase 0.
+
+$$\frac{P(Y=1|X)}{1-P(Y=1|X)} = e^{\beta_0+\beta_1x}$$
+
+$$ ln (z) = \beta_0+\beta_1x$$
+
+a ln(z) se llama logit en estadística
+
+INTERPRETACIÓN DE LOS COEFICIENTES BETAS
+$\beta_1$ nos da información sobre la relación lineal entre la variable de entrada y la de salida.
+
+family="binomial" (R, sólo tenemos dos clases), family=""
+Se hace un Z test para comprobar. Cuantos más asteriscos mejor :D
+
+Regresión logística crea dos niveles de respuesta para valores categóricos??
+
+Si es binomial optimiza:
+y * ^y + (1-y)(1-^y)
+
+La búsqueda de los parámetros Beta es iterativa y aproximada.
+
+LINEAR DISCRIMINANT ANALYSIS
+-----------------------------
+
+Vamos a usar el teorema de Bayes, necesitamos las distribución conjunta de valores, es muy costosa computacionalmente (test exponencial) (incluso para dos clases).
+
+Sólo existe una solución única, inversas de matrices.
+Hay qu tener más ejemplos que clases y los predictores asume que han de ser independientes.
+Reescalado y normalización
+
+Recomienda 5-10 veces más muestras que atributos.
+
+
+knn, lda y qda
+Explorar distinto valor de k.
+Explorar si se cumplen asunciones de normalidad.
+Comparar los tres, utilizar Friedman + post-hoc Holm y ver si son significativamente diferentes. Hacer con validación cruzada los valores para el test. Usar particiones preplanteadas?
