@@ -1,0 +1,283 @@
+---
+title: "Guión de Ejercicios R - Segunda Parte"
+author: "David Criado Ramón"
+date: "23/10/2019"
+output:
+  pdf_document: default
+---
+
+
+# String Manipulation
+
+
+### 1. Crea un vector de strings que contengan 3 datos: tu primer nombre y tus dos apellidos. A partir de éste, crea un nuevo string con la inicial de tu nombre (y un punto) y el apellido completo utilizando las utilidades de R. En mi caso debería quedar: D. Criado Ramón.
+
+
+```{r strings1}
+nombre = c("David", "Criado", "Ramon")
+nombre_abreviado = paste(substr(nombre[1],1,1), nombre[2], nombre[3])
+nombre_abreviado = paste(nombre_abreviado, '.', sep='')
+nombre_abreviado
+```
+
+### 2. Dado un vector de fechas expresadas como strings (e.g., "2005-11-28"), muestra sólamente aquellas correspondientes a los meses impares.
+
+```{r strings2}
+# Creamos un vector con varias fechas.
+fechas = c("1996-10-07", "2019-10-24", "2015-01-13", "2005-11-28")
+
+# Extraemos los números y los pasamos a enteros.
+fechas_descompuestas = strsplit(fechas, split='-')
+fechas_descompuestas = as.integer(unlist(fechas_descompuestas))
+
+# Seleccionamos los meses.
+indices_meses = seq(2, 2 + 3 * (length(fechas) - 1), 3)
+meses = fechas_descompuestas[indices_meses]
+
+# Comprobamos si son impares.
+meses_impares_pos = which(meses%%2==1)
+
+# Mostramos las fechas con meses impares.
+fechas_impares = fechas[meses_impares_pos]
+fechas_impares
+```
+### 3. Dado un string con varias palabras (e.g., "Esto es una frase, pero no cualquier frase.") crea un vector con cada una de las palabras del string (["Esta", "es", "una", "frase", "pero", "no", "cualquier", "frase"]).
+
+```{r strings3}
+frase = "Esto es un frase, pero no cualquier frase"
+# Descomponemos la frase tomando como puntos de separación
+# el espacio o la coma seguida de espacio.
+frase_descompuesta = unlist(strsplit(frase, split= " |, "))
+frase_descompuesta
+```
+### 4. Busca las palabras que sólamente usan las vocales "a" y "e" en un vector de strings.
+
+```{r strings4}
+palabras = c("hola", "azul", "naranja", "verde", "lata", "saco", "bola", "bolo", "vela")
+
+# Seleccionamos todoas las palabras que contienen a o e.
+# quitando aquellas que contienen i, o, u.
+palabras_ae = palabras[grep("[ae]", palabras)]
+
+palabras_solo_ae = palabras_ae[-grep("[iou]", palabras_ae)]
+palabras_solo_ae
+
+```
+### 5. Dados tres vectores dia , mes y anno crea un vector con las fechas completas. Si la fecha es inválida, ésta se descartará (hint: investiga la función as.Date).
+```{r strings5}
+dia = c(31,5,7,11,28,31,2,25,30)
+mes = c(9,1,5,4,6,2,3,4,7)
+anno = c(2003,2007,2010,1995,1996,2013,2018,2019,2010)
+
+# Juntamos las fechas en un string.
+fechas_str = paste(dia, mes, anno, sep='-')
+fechas = as.Date(fechas_str, format = "%d-%m-%Y")
+
+# Eliminamos fechas inválidas (NA)
+fechas = na.exclude(fechas)
+fechas
+```
+
+# Input/Output
+
+### 1. Pide al usuario que introduzca un string s y un número n y muestra en pantalla n veces seguidas el string s (sin espacios entre palabra y palabra).
+
+
+```{r io1}
+string = readline("Introduzca un string: ") # Hola
+numero = readline("Introduzca un número: ") # 5
+paste(rep(string, numero), collapse = "")
+```
+
+### 2. Crea tres ficheros dos.txt, tres.txt y cinco.txt que contengan la tabla del 2, la del 3 y la del 5 respectivamente (los primeros 10 valores de cada tabla, un número en cada línea de cada fichero).
+```{r io2}
+# Creamos las tablas.
+limite = 10
+tabla_dos = seq(2, 2 * limite, 2)
+tabla_tres = seq(3, 3 * limite, 3)
+tabla_cinco = seq(5, 5 * limite, 5)
+
+# Las escribimos en un archivo.
+write.table(tabla_dos, "dos.txt", row.names=FALSE, col.names=FALSE)
+write.table(tabla_tres, "tres.txt", row.names=FALSE, col.names=FALSE)
+write.table(tabla_cinco, "cinco.txt", row.names=FALSE, col.names=FALSE)
+```
+
+### 3. Carga los tres ficheros creados en el punto anterior y construye una matriz que, en cada columna, tenga el contenido de cada fichero.
+```{r io3}
+tabla_dos = scan("dos.txt")
+tabla_tres = scan("tres.txt")
+tabla_cinco = scan("cinco.txt")
+
+matriz = cbind(tabla_dos, tabla_tres, tabla_cinco)
+matriz
+```
+### 4. Escribe las cinco primeras filas de la matriz del ejercicio anterior en un fichero nuevo llamado prime.txt y las cinco últimas en otro fichero llamado fin.txt. Ambos ficheros deben tener los datos separados por comas.
+```{r io4}
+write.csv(matriz[1:5,], "prime.txt", row.names=F)
+write.csv(matriz[6:10,], "fin.txt", row.names=F)
+```
+### 5. Dados dos números introducidos por el usuario f y c, crea un cuadrado de f filas y c columnas con el carácter "x"
+```{r io5}
+f = readline("Introduzca el número de filas: ") # 3
+c = readline("Introduzca el número de columnas: ") # 5
+
+# Generamos una fila con c columnas sin separación.
+fila = paste(rep('x', c), collapse = "")
+
+# Repetimos el patrón en f filas.
+salida = paste(rep(fila, f), collapse='\n')
+
+# Lo mostramos por pantalla.
+cat(salida)
+```
+
+# Functions
+### 1. Crea una función impares que dado un vector devuelva la cantidad de elementos impares que contiene.
+```{r func1}
+impares = function(v) {
+  length(which(v%%2==1))
+}
+prueba = 1:10
+n_impares = impares(prueba)
+n_impares
+```
+### 2. Crea una función cambio que dada una matriz de números enteros reemplace todos los NA por el valor 0.
+```{r func2}
+cambio = function(m) {
+  m[which(is.na(m))] = 0
+  m
+}
+
+matriz = matrix(1:9, nrow=3, ncol=3)
+matriz[2,2] = NA
+matriz[3,1] = NA
+matriz = cambio(matriz)
+matriz
+```
+### 3. Crea una función unir que dados dos vectores devuelva un nuevo vector con los elementos de ambos vectores sin repetidos.
+```{r func3}
+unir = function(v1, v2) {
+  union(v1, v2)
+}
+
+v1 = c(1,2,3,4,5,9)
+v2 = c(4,5,6,7,8,9,10)
+
+v_out = unir(v1, v2)
+v_out
+
+```
+### 4. Crea una función vyc que dado un string devuelva una lista de dos componentes que contenga las vocales y las consonantes.
+```{r func4}
+vyc = function(s) {
+  letras = unlist(strsplit(s, ''))
+  pos_vocales = grep("[aeiou]", letras)
+  vocales = letras[pos_vocales]
+  consonantes = letras[-pos_vocales]
+  list(consonantes, vocales)
+}
+
+my_vic = vyc("Prueba")
+my_vic
+```
+
+### 5. Crea una función partir que dado un vector v y dos valores x e y (siendo y opcional), retorne un vector con los valores que aparecen luego del primer x y hasta el primer y. De no indicarse el valor de y, se devolverán todos los valores que aparecen luego del primer x hasta el final del vector.
+```{r func5}
+partir = function(v, x, y=F) {
+  pos_ini = which(v==x)[1]
+  if (y) {
+    pos_fin = which(v==y)[1]
+  }
+  else {
+    pos_fin = length(v)
+  }
+  v[pos_ini:pos_fin]
+}
+
+v = c(1,2,3,4,5,3)
+partir(v, 3, 5)
+```
+``` {r func5out2}
+partir(v,2)
+```
+# R Programming Structures
+### 1. Crea una función creciente que indique si los elementos de un vector dado son estrictamente crecientes. No se permite ordenar el vector.
+```{r struct1}
+creciente = function(v) {
+  es_creciente = T
+  i = 1
+  while (i < length(v) && es_creciente) {
+    if (v[i] >= v[i + 1]) {
+      es_creciente = F
+    }
+    i = i + 1
+  }
+  es_creciente
+}
+
+v = c(1,2,3,4,5,6,7)
+creciente(v)
+```
+
+```{r struct1out2}
+v = c(1,2,5,4,3,6,7)
+creciente(v)
+```
+
+### 2. Crea una función montecarlo que realice el método de Montecarlo.
+```{r struct2}
+montecarlo = function(x){
+  hits = 0
+  for (i in 1:x){
+    randoms = runif(n=2, min=0, max=1)
+    if (randoms[2] < randoms[1]^2){
+      hits = hits + 1
+    }
+  }
+  hits / x
+  
+}
+
+montecarlo(200)
+```
+### 3. Crea una lista de 5 vectores numéricos y ordena todos los vectores de la lista.
+```{r struct3}
+lista = list(c(1,3,2,4,5), c(3,2,1,6,7),c(5,4,3,2,1),c(7,8,5,10,2), c(9,8,7,6,5))
+lista
+```
+
+```{r struct3order}
+lista_ordenada = lapply(lista, sort)
+lista_ordenada
+```
+### 4. Calcula el valor mínimo de cada columna de una matriz, pero toma los valores impares como números negativos y los pares como positivos.
+```{r struct4}
+# Creamos una matriz
+matriz = matrix(1:9, nrow=3, ncol=3)
+# Encontramos los numeros impares
+pos_neg = which(abs(matriz)%%2==1)
+
+# Los forzmaos a ser negativos
+matriz_neg = matriz
+matriz_neg[pos_neg] = -abs(matriz[pos_neg])
+matriz_neg
+```
+
+```{r struct4part2}
+# Scamos el mínimo por columnas
+mins=apply(matriz_neg, 2, min)
+mins
+```
+### 5. Dada una matriz devuelve una lista con los valores mayores a 7 en cada fila.
+```{r struct5}
+matriz = matrix(c(6,8,4,11,7,3,9,1,10), nrow=3, ncol=3)
+matriz
+```
+
+``` {r struct5part2}
+mayor_que_siete = function(v) {
+  v[which(v>7)]
+}
+apply(matriz,1,mayor_que_siete)
+```

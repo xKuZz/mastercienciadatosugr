@@ -1,0 +1,6 @@
+"tabla_dos","tabla_tres","tabla_cinco"
+2,3,5
+4,6,10
+6,9,15
+8,12,20
+10,15,25

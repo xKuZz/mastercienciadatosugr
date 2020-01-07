@@ -1,0 +1,68 @@
+---
+title: "Ejercicios de Gráficos en R"
+author: "David Criado Ramón"
+date: "07/11/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(5)
+```
+
+### 1. Mostrar gráficamente la información correspondiente a summary(iris[1:4]). Pista: uso de boxplot.
+```{r graphics1_seesummary}
+summary(iris[1:4])
+```
+```{r graphics1_boxplot}
+boxplot(iris[1:4], outlines=F, axis=F)
+```
+
+### 2. Rellenar una matriz nrow = 30, ncol = 4, con números aleatorios cada columna, supongamos que son las tasas de éxito en clasificación correspondiente a 4 algoritmos distintos. Pintar una gráfica de curvas de cada, identificando cada uno de los algoritmos con su leyenda.
+```{r graphics2}
+matriz <- matrix(runif(120), nrow=30, ncol=4)
+matriz
+```
+
+```{r graphics2-parte2}
+plot(1:30,matriz[,1], type="l", col="blue", xlab="Casos",
+     ylab="Tasa de exito (clasificacion)")
+lines(1:30, matriz[,2], col="red")
+lines(1:30, matriz[,3], col="green")
+lines(1:30, matriz[,4], col="black")
+legend(x=0, y = 1, legend=c("Algoritmo 1", "Algoritmo 2", "Algoritmo 3", 
+                            "Algoritmo 4"), col=c("blue", "red", "green", "black"), lty=1)
+
+
+```
+
+### 3. Ejecuta las siguientes instrucciones: library(MASS); str(quine); xtabs(~ Age, data=quine); prop.table(xtabs(~ Age, data=quine)). Haz un gráfico compuesto, con dos gráficas de barras correspondientes a xtabs y props.table, la frecuencia absoluta y la frecuencia relativa de las edades.
+```{r ej3parte1}
+library(MASS)
+str(quine) 
+``` 
+
+```{r ej3parte2}
+par(mfrow=c(1,2))
+x <- xtabs(~ Age, data=quine)
+y <- prop.table(xtabs(~ Age, data=quine))
+barplot(x, main="Frecuencia absoluta de edades", col=c("blue"))
+barplot(y, main="Frecuencia relativa de edades", col=c("red"))
+```
+### 4. Representa la misma información anterior mediante gráficas de tipo pie y dotchart con título. En pie, fija colores y sentido horario.
+```{r ej4}
+par(mfrow=c(1,2))
+pie(x, clockwise=T, col=c("blue", "red", "green", "yellow"), 
+    main="Frecuencia absoluta de edades")
+dotchart(as.numeric(y), main="Frecuencia relativa de edades")
+
+```
+
+### 5. Sea un dataset cars, representar los puntos dist vs speed, esto es, el atributo dist en ordenadas. Sea m, m = lm(speed~dist, data=cars), el resultado de aplicar un ajuste mediante regresión lineal. El valor resultado es una recta en forma. Pinta la línea de ajuste del modelo m, en rojo. Pista: abline.
+
+```{r ej5}
+m = lm(speed~dist, data=cars)
+plot(cars, xlab="speed", ylab="dist", col="blue")
+abline(m, col="red")
+
+```

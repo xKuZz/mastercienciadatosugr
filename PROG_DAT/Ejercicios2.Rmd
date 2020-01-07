@@ -1,0 +1,106 @@
+---
+title: "Ejercicios Introducción a R (2)"
+author: "David Criado Ramón"
+date: "9/11/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción a R
+## 1. Matrices
+
+### Crea los siguientes vectores
+```{r}
+new_hope <- c(460.998007, 314.4)
+empire_strikes <- c(290.475067, 247.9)
+return_jedi = c(309.306177, 165.8)
+```
+
+### Los datos se corresponden con las ventas en millones de la trilogía de la guerra de las galaxias. El primer número se corresponde a las ventas en US, y el segundo al resto de países. Recuerda que el decimal en los países anglosajones se expresa con un ".".
+
+- a) Construye la matriz star_wars_matrix con esos vectores.
+```{r}
+star_wars_matrix <- matrix(c(new_hope, empire_strikes, return_jedi), 3, 2, byrow=T)
+star_wars_matrix
+```
+- b) Añádeles nombres a las columnas y las filas de la matriz según las descripciones dadas anteriormentes de los datos.
+```{r}
+rownames(star_wars_matrix) <- c("New Hope", "Empire Strikes", "Return Jedi")
+colnames(star_wars_matrix) <- c("Ventas USA", "Ventas resto países")
+star_wars_matrix
+```
+
+- c) Calcula las ganancias mundiales de cada película y guárdalas en un vector que se llame worldwide_vector
+```{r}
+worldwide_vector = star_wars_matrix[,1] + star_wars_matrix[,2]
+worldwide_vector
+```
+
+- d) Añade este último vector como una columna nueva a la matriz star_wars_matrix y asigna el resultado a all_wars_matrix. Usa para ello la función cbind().
+```{r}
+all_wars_matrix <- cbind(star_wars_matrix, worldwide_vector)
+all_wars_matrix
+```
+
+- e) Calcula las ganancias totales en USA y fuera de USA para las tres películas. Puedes usar para ello la función colSums()
+```{r}
+colSums(star_wars_matrix)
+```
+
+- f) Calcula la media de ganancias para todas las películas fuera de los estados unidos. Asigna a esa media la variable non_us_all
+```{r}
+non_us_all <- mean(star_wars_matrix[,2])
+non_us_all
+```
+
+- g) Haz lo mismo pero sólo para las dos primeras películas. Asigna el resultado a la variable non_us_some
+```{r}
+non_us_some <- mean(star_wars_matrix[1:2,2])
+non_us_some
+```
+- h) Calcula cuantos visitantes hubo para cada película en cada área geográfica. Ya tienes las ganancias totales en star_wars_matrix. Asume que el precio de las entradas es de cinco euros/dólares. (Nota: Las ganancias totales para cada película dividido por el precio del ticket te da el número de visitantes)
+```{r}
+M <- star_wars_matrix * 100000 / 5
+colnames(M) <- c("Entradas USA", "Entradas resto países")
+M
+```
+## 2. Subsetting matrices y arrays
+
+### Como hemos visto en teoría la sintaxis para acceder tanto a las matricescomo a arrays bidimiensionales es array[rows, columns]. Muchas funciones de R necesitan una matriz como dato de entrada. Si algo no funciona recuerda convertir el objeto a una matriz con la función as.matrix(iris)  Crea un array i <- array(c(1:10),dim=c(5,2)). ¿Que información te dan los siguientes comandos?
+```{r}
+i <- array(c(1:10),dim=c(5,2))
+i
+```
+```{r}
+dim(i)
+```
+
+dim(i) devuelve un vector con las dimensiones del array.
+
+```{r}
+nrow(i)
+```
+nrow(i) devuelve el número de filas del array, es igual que dim(i)[1].
+
+```{r}
+ncol(i)
+```
+
+ncol(i) devuelve el número de columnas del array, es igual que dim(i)[2].
+
+### Descárgate el fichero array_datos.txt de PRADO (Datos/)
+- impórtalo en tu workspace teniendo en cuenta que es un texto tabulado.
+```{r}
+datos <- read.table("array_datos.txt")
+datos
+```
+
+- crea un documento con los mismos datos pero en formato csv en vez de tab separated.
+
+```{r}
+write.csv2(datos, file = "array_datos.csv", row.names = F)
+```
+

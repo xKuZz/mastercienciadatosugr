@@ -1,0 +1,92 @@
+---
+title: "Ejercicios Factores"
+author: "David Criado Ramón"
+date: "9/11/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción a R (3)
+## 1. Factors
+
+### Dado x = c(1, 2, 3, 3, 5, 3, 2, 4, NA), ¿cuáles son los levels de factor(x)?
+```{r}
+x <- c(1, 2, 3, 3, 5, 3, 2, 4, NA)
+factor(x)
+```
+
+Los niveles del factor son los valores únicos para el mismo, ignorando los "missing values" (NA), por lo que son 1, 2, 3, 4 y 5.
+
+### Dado x = c(11, 22, 47, 47, 11, 47, 11) y la ejecución de la sentencia factor(x, levels=c(11, 22, 47), ordered=TRUE), ¿cuál es el cuarto elemento de salida?
+
+```{r}
+x <- c(11, 22, 47, 47, 11, 47, 11)
+factor(x, levels=c(11,22,47), ordered=TRUE)
+```
+El cuarto elemento de salida es el factor asociado al valor que ocupa la cuarta posición en el vector x, por lo que el cuarto elemento de salida es el factor 47.
+
+### Para el factor z <- c("p", "a", "g", "t", "b"), reemplazar el tercer elemento de z por "b"
+```{r}
+z <- c("p", "a", "g", "t", "b")
+z[3] <- "b"
+z
+```
+Z es un vector de caracteres por lo que hemos de utilizar z[3] para poder modificar la categoría asociada a esa posición.
+
+Si z fuese un factor se haría lo mismo, aunque en los diferentes valores para el factor seguiría quedando "g" como un valor posible.
+```{r}
+z <- factor(c("p", "a", "g", "t", "b"))
+z[3] <- "b"
+z
+```
+
+### Dado z <- factor(c("p", "q", "p", "r", "q")), escribe una expresión de R, que cambie el level "p" a "w"
+```{r}
+z <- factor(c("p", "q", "p", "r", "q"))
+levels(z) <- c("w", "q", "r")
+z
+```
+
+### Usa el dataset "iris":
+
+- Escribe la expresión necesaria para convertir la variable "Sepal.Length" en un valor con cinco niveles (levels). Pista: mira la función table() y la función cut().
+```{r}
+x <- iris
+x$Sepal.Length <- cut(x$Sepal.Length, 5)
+head(x$Sepal.Length)
+```
+
+- Escribe la expresión necesaria para generar una tabla de frecuencias con dos filas y tres columnas. Las filas deben referirse a si la variable "Sepal.Length" es menor que 5 y las columnas a las diferentes especies.
+
+```{r}
+table(iris$Sepal.Length < 5, iris$Species)
+```
+
+
+### El factor responses se define como responses <- factor(c("Agree", "Agree", "Strongly Agree", "Disagree", "Agree")), sin embargo nos damos cuenta que tiene un nuevo nivel, "Strongly Disagree". Añade el nuevo nivel al factor y conviértelo en un factor ordenado. Debe quedar de la siguiente manera:
+
+Levels: Strongly Agree < Agree < Disagree < Strongly Disagree
+```{r}
+responses <- factor(c("Agree", "Agree", "Strongly Agree", "Disagree", "Agree"))
+responses <- factor(responses, levels = c("Strongly Agree", "Agree", "Disagree", 
+                                          "Strongly Disagree"), order=T)
+responses
+```
+
+
+### Dado el factor x <- factor(c("high", "low", "medium", "high", "high", "low", "medium")) escribe expresión en R que permita dar valores numéricos únicos para los distintos niveles (levels) de x según el siguiente esquema: (Pista: investiga la función unique() y los parámetros de data.frame())
+
+level high => value 1
+level low => value 2
+level medium => value 3
+
+```{r}
+x <- factor(c("high", "low", "medium", "high", "high", "low", "medium"))
+df <- data.frame(x, value=as.numeric(x))
+df
+```
+
+Para que cada categoría del factor tenga asociada un valor numérico simplemente hemos de crear un dataframe e indicar el parámetro value como una versión numérica de x.
